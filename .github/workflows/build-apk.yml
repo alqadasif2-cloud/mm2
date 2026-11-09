@@ -1,0 +1,92 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-apk:
+    name: Build & Package Android APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Install Node Dependencies
+        run: npm install --legacy-peer-deps --no-audit --no-fund
+
+      - name: Build Web Application
+        run: npm run build
+
+      - name: Sync Web Assets to Android Project
+        run: npx cap sync android
+
+      - name: Make Gradle Wrapper Executable
+        run: chmod +x android/gradlew
+
+      - name: Build Android APK via Gradle
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Prepare APK File for Download
+        run: |
+          mkdir -p release-apk
+          APK_FOUND=$(find android/app/build/outputs/apk -name "*.apk" | head -n 1)
+          if [ -n "$APK_FOUND" ] && [ -f "$APK_FOUND" ]; then
+            echo "Found APK: $APK_FOUND"
+            cp "$APK_FOUND" release-apk/MetaTrader-5.apk
+            ls -lh release-apk/MetaTrader-5.apk
+          else
+            echo "ERROR: Could not find APK"
+            find android -name "*.apk" || true
+            exit 1
+          fi
+
+      - name: Upload APK to GitHub Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: MetaTrader-5-APK
+          path: release-apk/MetaTrader-5.apk
+          retention-days: 30
+
+      - name: Create GitHub Release with APK
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: MetaTrader 5 APK v1.0.${{ github.run_number }}
+          body: |
+            ### 📱 تطبيق MetaTrader 5 (MT5) لأندرويد
+            حمّل ملف `MetaTrader-5.apk` المرفق أدناه وثبّته على هاتفك.
+          files: release-apk/MetaTrader-5.apk
+        continue-on-error: true
