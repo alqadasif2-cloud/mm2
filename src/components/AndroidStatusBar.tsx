@@ -6,7 +6,7 @@ export const AndroidStatusBar: React.FC = () => {
     <div className="w-full bg-[#000000] text-[#cfd3d8] px-4 py-1.5 flex items-center justify-between text-xs font-sans tracking-wide border-b border-black select-none z-50">
       {/* Right side (RTL left visual, but in Android Arabic layout: Time on right, Battery on left) */}
       <div className="flex items-center gap-1.5 font-medium">
-        <span className="text-[13px] font-semibold text-white tracking-tighter">٣:٥٨</span>
+        <span className="text-[13px] font-semibold text-white tracking-tighter">٧:٠١</span>
         {/* Small app icons like Snapchat and YouTube */}
         <div className="flex items-center gap-1 text-[#a0aab4] ml-1">
           {/* YouTube play icon */}
@@ -33,12 +33,12 @@ export const AndroidStatusBar: React.FC = () => {
         <Wifi className="w-3.5 h-3.5 text-[#e0e4e8]" />
         {/* Cellular Signal */}
         <Signal className="w-3.5 h-3.5 text-[#e0e4e8]" />
-        {/* Battery & %12 */}
+        {/* Battery & %8 */}
         <div className="flex items-center gap-1">
-          <span className="text-[11px] font-bold text-white tracking-tight">%١٢</span>
+          <span className="text-[11px] font-bold text-white tracking-tight">%٨</span>
           {/* Battery pill */}
           <div className="w-4 h-2.5 border border-[#e0e4e8] rounded-[2px] p-[1px] flex items-center relative">
-            <div className="h-full bg-red-500 rounded-[1px] w-[20%]"></div>
+            <div className="h-full bg-red-500 rounded-[1px] w-[14%]"></div>
             <div className="w-[1.5px] h-1 bg-[#e0e4e8] absolute -left-[2.5px] top-[2px] rounded-r-[1px]"></div>
           </div>
         </div>

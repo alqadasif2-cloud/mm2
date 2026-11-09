@@ -42,7 +42,7 @@ export const AccountsView: React.FC = () => {
           <h1 className="text-xl font-bold text-white tracking-wide">الحسابات</h1>
         </div>
 
-        {/* Left side icons matching screenshot: Certificate, Plus, 3-dots */}
+        {/* Left side icons matching screenshot: Certificate/Medal, Plus, 3-dots */}
         <div className="flex items-center gap-1 text-[#d8dfe6]">
           {/* Certificate with star / medal icon */}
           <button
@@ -128,51 +128,23 @@ export const AccountsView: React.FC = () => {
         </div>
       </header>
 
-      {/* Scrollable Container */}
-      <div className="flex-1 overflow-y-auto px-3.5 py-3 space-y-3 scrollbar-thin">
-        {/* Top Connecting Account Card (Exact replica from the user screenshot) */}
-        <div className="bg-[#1c1d22] rounded-[24px] p-5 flex flex-col items-center justify-center text-center shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-[#2b2e36] relative overflow-hidden">
-          {/* Centered Yellow Exness Logo */}
-          <div className="mb-2">
-            <ExnessLogo className="w-13 h-13" />
-          </div>
-
-          {/* Broker Name in Light Blue */}
-          <h3 className="text-[#3f96f3] text-[15px] font-semibold tracking-wide">
-            Exness Technologies Ltd
-          </h3>
-
-          {/* Server & Account Number */}
-          <p className="text-[#8e9aa8] text-[13px] mt-1 tabular-nums font-normal" dir="ltr">
-            252622825 — Exness-MT5Real33
-          </p>
-
-          {/* Connecting status label */}
-          <div className="text-[#8e9aa8] text-[13px] mt-2 flex items-center justify-center gap-1.5">
-            <span className="inline-block animate-pulse">... جارى الأتصال بـ</span>
-          </div>
-        </div>
-
-        {/* Section Title "الاتصال إلى" */}
-        <div className="text-right text-[#8e9aa8] text-[13px] font-medium pt-1 pb-0.5 px-1">
-          الاتصال إلى
-        </div>
-
-        {/* Accounts List matching screenshot */}
+      {/* Accounts List Container (Exact replica of the user screenshot) */}
+      <div className="flex-1 overflow-y-auto px-3.5 py-3 space-y-3.5 scrollbar-thin">
         {accounts.map((acc) => {
           const isActive = activeAccount.id === acc.id;
+          const isArabicName = /[\u0600-\u06FF]/.test(acc.name);
 
           return (
             <div
               key={acc.id}
               onClick={() => handleSelectAccount(acc)}
-              className={`relative bg-[#1f2125] rounded-[20px] p-4 transition-all duration-200 cursor-pointer overflow-hidden border ${
+              className={`relative bg-[#1c1d22] rounded-[22px] p-4 transition-all duration-200 cursor-pointer overflow-hidden border ${
                 isActive
-                  ? 'border-[#3897f0]/80 shadow-[0_0_16px_rgba(56,151,240,0.22)] ring-1 ring-[#3897f0]/50'
-                  : 'border-[#282b30] hover:border-[#383d44]'
+                  ? 'border-[#3897f0]/80 shadow-[0_0_16px_rgba(56,151,240,0.2)] ring-1 ring-[#3897f0]/50'
+                  : 'border-[#26282f] hover:border-[#353942]'
               }`}
             >
-              {/* Green "Demo" Ribbon in the TOP-RIGHT corner (matching screenshot) */}
+              {/* Green "Demo" Ribbon in the TOP-RIGHT corner (for Demo accounts) */}
               {acc.type === 'demo' && (
                 <div className="absolute top-0 right-0 w-24 h-24 overflow-hidden pointer-events-none z-10">
                   <div className="absolute transform rotate-45 bg-[#00c853] text-black font-extrabold text-[11px] py-0.5 right-[-34px] top-[14px] w-[120px] text-center shadow-md tracking-wider">
@@ -181,23 +153,13 @@ export const AccountsView: React.FC = () => {
                 </div>
               )}
 
-              {/* Upper Main Row: Account details on the left, Broker Logo on the right */}
-              <div className="flex items-start justify-between">
-                {/* Left Side: Account Name, Broker, Server (aligned to the left as in screenshot) */}
-                <div className="flex flex-col items-start text-left z-0 pr-2">
-                  <h2 className="text-[17px] font-bold text-white tracking-tight leading-snug">
-                    {acc.name}
-                  </h2>
-                  <p className="text-[14px] font-medium text-[#3f96f3] mt-0.5">
-                    {acc.broker}
-                  </p>
-                  <p className="text-[13px] font-normal text-[#8e9aa8] mt-0.5 tabular-nums" dir="ltr">
-                    {acc.accountNumber} — {acc.server}
-                  </p>
-                </div>
+              {/* Top Row: Logo positioned on the right */}
+              <div className="flex items-start justify-between w-full">
+                {/* Left placeholder for symmetry */}
+                <div className="w-12 h-6"></div>
 
-                {/* Right Side: Broker Logo (Exness yellow square or MetaQuotes 3D logo) */}
-                <div className="shrink-0 pl-1 pt-0.5 z-0">
+                {/* Right: Broker Logo */}
+                <div className="shrink-0 z-0">
                   {acc.logoType === 'exness' ? (
                     <ExnessLogo className="w-12 h-12" />
                   ) : (
@@ -206,21 +168,39 @@ export const AccountsView: React.FC = () => {
                 </div>
               </div>
 
-              {/* Balance Row (aligned on the right side under the logo, as in screenshot) */}
-              <div className="mt-2 flex flex-col items-end text-right">
-                <div className="text-[25px] font-bold text-white tracking-tight tabular-nums leading-none">
+              {/* Centered Account Data (Name, Broker, Server, Balance, Currency Label) */}
+              <div className="flex flex-col items-center justify-center text-center -mt-4 mb-2 px-2">
+                {/* Account Owner Name */}
+                <h2 className="text-[18px] font-bold text-white tracking-tight leading-snug">
+                  {acc.name}
+                </h2>
+
+                {/* Broker Name in Light Blue */}
+                <p className="text-[14px] font-medium text-[#3f96f3] mt-0.5">
+                  {acc.broker}
+                </p>
+
+                {/* Server and Account Number */}
+                <p className="text-[13px] font-normal text-[#8e9aa8] mt-0.5 tabular-nums" dir="ltr">
+                  {acc.accountNumber} — {acc.server}
+                </p>
+
+                {/* Balance (Large Bold Numbers) */}
+                <div className="text-[27px] font-bold text-white tracking-tight tabular-nums mt-3 leading-none">
                   {acc.balance.toLocaleString('en-US', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                   })}
                 </div>
-                <div className="text-[12px] text-[#8e9aa8] font-normal mt-1">
-                  {acc.lastKnownLabel || 'آخر ما عرف، USD'}
+
+                {/* Status / Last Known Label */}
+                <div className="text-[12px] text-[#8e9aa8] font-normal mt-1.5">
+                  {acc.lastKnownLabel || 'آخر ما عرف . USD'}
                 </div>
               </div>
 
               {/* Card Footer: (i) on the left, QR icon on the right (matching screenshot) */}
-              <div className="mt-3 pt-2.5 border-t border-[#292c33] flex items-center justify-between">
+              <div className="mt-3 pt-2.5 flex items-center justify-between">
                 {/* Info (i) icon button on the left */}
                 <button
                   onClick={(e) => {
@@ -238,7 +218,7 @@ export const AccountsView: React.FC = () => {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    alert(`رمز الاستجابة السريعة (QR) للحساب:\nرقم: ${acc.accountNumber}\nخادم: ${acc.server}\nوسيط: ${acc.broker}`);
+                    alert(`رمز الاستجابة السريعة (QR) للحساب:\nصاحب الحساب: ${acc.name}\nرقم: ${acc.accountNumber}\nخادم: ${acc.server}\nوسيط: ${acc.broker}`);
                   }}
                   aria-label="QR Code"
                   className="w-7 h-7 flex items-center justify-center text-[#8e9aa8] hover:text-white transition-colors cursor-pointer"

@@ -44,34 +44,8 @@ interface TradingContextType {
 
 const INITIAL_ACCOUNTS: Account[] = [
   {
-    id: 'exness-trial-16',
-    name: 'Standard',
-    broker: 'Exness Technologies Ltd',
-    server: 'Exness-MT5Trial16',
-    accountNumber: '472970564',
-    balance: 29.35,
-    currency: 'USD',
-    type: 'demo',
-    leverage: '1:2000',
-    logoType: 'exness',
-    lastKnownLabel: 'آخر ما عرف، USD'
-  },
-  {
-    id: 'metaquotes-demo-50',
-    name: 'Eslam Alqadasi',
-    broker: 'MetaQuotes Ltd.',
-    server: 'MetaQuotes-Demo',
-    accountNumber: '5057410470',
-    balance: 97370.33,
-    currency: 'USD',
-    type: 'demo',
-    leverage: '1:100',
-    logoType: 'metaquotes',
-    lastKnownLabel: 'آخر ما عرف، USD'
-  },
-  {
     id: 'exness-real-35',
-    name: 'طارق',
+    name: 'اسلام',
     broker: 'Exness Technologies Ltd',
     server: 'Exness-MT5Real35',
     accountNumber: '256476260',
@@ -80,7 +54,46 @@ const INITIAL_ACCOUNTS: Account[] = [
     type: 'real',
     leverage: '1:2000',
     logoType: 'exness',
-    lastKnownLabel: 'آخر ما عرف، USD'
+    lastKnownLabel: 'آخر ما عرف . USD'
+  },
+  {
+    id: 'demo-1',
+    name: 'Eslam Alqadasi',
+    broker: 'MetaQuotes Ltd.',
+    server: 'MetaQuotes-Demo',
+    accountNumber: '111678767',
+    balance: 2999.60,
+    currency: 'USD',
+    type: 'demo',
+    leverage: '1:100',
+    logoType: 'metaquotes',
+    lastKnownLabel: 'آخر ما عرف . USD'
+  },
+  {
+    id: 'demo-2',
+    name: 'Eslam Alqadasi',
+    broker: 'MetaQuotes Ltd.',
+    server: 'MetaQuotes-Demo',
+    accountNumber: '10012302748',
+    balance: 3000.58,
+    currency: 'USD',
+    type: 'demo',
+    leverage: '1:100',
+    logoType: 'metaquotes',
+    lastKnownLabel: 'آخر ما عرف . USD'
+  },
+  {
+    id: 'exness-real-33',
+    name: 'هاني جديد',
+    broker: 'Exness Technologies Ltd',
+    server: 'Exness-MT5Real33',
+    accountNumber: '252352322',
+    balance: 0.26,
+    currency: 'USD',
+    type: 'real',
+    leverage: '1:2000',
+    logoType: 'exness',
+    lastKnownLabel: 'آخر ما عرف . USD'
   }
 ];
 
@@ -240,7 +253,7 @@ const INITIAL_MESSAGES: MessageItem[] = [
     content: 'يختبر الذهب حالياً مستوى 4106$ للأونصة مدعوماً بتوقعات خفض الفائدة. مستويات المقاومة التالية عند 4125$ والدعم عند 4090$.',
     sender: 'MQL5 Financial News',
     time: 'منذ ساعتين',
-    read: false,
+    read: true,
     type: 'news'
   },
   {
