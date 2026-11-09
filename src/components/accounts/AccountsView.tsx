@@ -31,7 +31,7 @@ export const AccountsView: React.FC = () => {
           <button
             onClick={() => setIsDrawerOpen(true)}
             aria-label="القائمة الرئيسية"
-            className="w-10 h-10 flex items-center justify-center text-white active:bg-white/10 rounded-full transition-colors"
+            className="w-10 h-10 flex items-center justify-center text-white active:bg-white/10 rounded-full transition-colors cursor-pointer"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="w-6 h-6">
               <line x1="3" y1="6" x2="21" y2="6" />
@@ -42,28 +42,14 @@ export const AccountsView: React.FC = () => {
           <h1 className="text-xl font-bold text-white tracking-wide">الحسابات</h1>
         </div>
 
-        {/* Left side icons matching screenshot: Shield, Certificate, Plus, 3-dots */}
+        {/* Left side icons matching screenshot: Certificate, Plus, 3-dots */}
         <div className="flex items-center gap-1 text-[#d8dfe6]">
-          {/* OTP Shield Icon */}
-          <button
-            onClick={() => setOtpModalOpen(true)}
-            aria-label="مولد كلمات المرور لمرة واحدة (OTP)"
-            title="OTP Shield"
-            className="w-9 h-9 flex items-center justify-center active:bg-white/10 rounded-full transition-colors"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="currentColor" fillOpacity="0.15" />
-              <circle cx="12" cy="11" r="2" fill="currentColor" />
-              <path d="M12 13v3" strokeWidth="2" />
-            </svg>
-          </button>
-
           {/* Certificate with star / medal icon */}
           <button
             onClick={() => setCertModalOpen(true)}
             aria-label="الشهادات وإدارة المفاتيح"
             title="الشهادات"
-            className="w-9 h-9 flex items-center justify-center active:bg-white/10 rounded-full transition-colors"
+            className="w-9 h-9 flex items-center justify-center active:bg-white/10 rounded-full transition-colors cursor-pointer"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
               <circle cx="12" cy="8" r="6" />
@@ -77,7 +63,7 @@ export const AccountsView: React.FC = () => {
             onClick={() => setAddAccountModalOpen(true)}
             aria-label="إضافة حساب جديد"
             title="إضافة حساب"
-            className="w-9 h-9 flex items-center justify-center active:bg-white/10 rounded-full transition-colors"
+            className="w-9 h-9 flex items-center justify-center active:bg-white/10 rounded-full transition-colors cursor-pointer"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5">
               <line x1="12" y1="5" x2="12" y2="19" />
@@ -90,7 +76,7 @@ export const AccountsView: React.FC = () => {
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="خيارات إضافية"
-              className="w-9 h-9 flex items-center justify-center active:bg-white/10 rounded-full transition-colors"
+              className="w-9 h-9 flex items-center justify-center active:bg-white/10 rounded-full transition-colors cursor-pointer"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                 <circle cx="12" cy="5" r="1.8" />
@@ -118,6 +104,12 @@ export const AccountsView: React.FC = () => {
                   خصائص الحساب
                 </button>
                 <button
+                  onClick={() => setOtpModalOpen(true)}
+                  className="w-full text-right px-4 py-2 hover:bg-white/10 text-[#d8dfe6]"
+                >
+                  مولد OTP
+                </button>
+                <button
                   onClick={() => setAddAccountModalOpen(true)}
                   className="w-full text-right px-4 py-2 hover:bg-white/10 text-[#d8dfe6]"
                 >
@@ -136,83 +128,100 @@ export const AccountsView: React.FC = () => {
         </div>
       </header>
 
-      {/* Accounts List Container matching screenshot */}
-      <div className="flex-1 overflow-y-auto px-3.5 py-2.5 space-y-3.5 scrollbar-thin">
-        {accounts.map((acc, index) => {
+      {/* Scrollable Container */}
+      <div className="flex-1 overflow-y-auto px-3.5 py-3 space-y-3 scrollbar-thin">
+        {/* Top Connecting Account Card (Exact replica from the user screenshot) */}
+        <div className="bg-[#1c1d22] rounded-[24px] p-5 flex flex-col items-center justify-center text-center shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-[#2b2e36] relative overflow-hidden">
+          {/* Centered Yellow Exness Logo */}
+          <div className="mb-2">
+            <ExnessLogo className="w-13 h-13" />
+          </div>
+
+          {/* Broker Name in Light Blue */}
+          <h3 className="text-[#3f96f3] text-[15px] font-semibold tracking-wide">
+            Exness Technologies Ltd
+          </h3>
+
+          {/* Server & Account Number */}
+          <p className="text-[#8e9aa8] text-[13px] mt-1 tabular-nums font-normal" dir="ltr">
+            252622825 — Exness-MT5Real33
+          </p>
+
+          {/* Connecting status label */}
+          <div className="text-[#8e9aa8] text-[13px] mt-2 flex items-center justify-center gap-1.5">
+            <span className="inline-block animate-pulse">... جارى الأتصال بـ</span>
+          </div>
+        </div>
+
+        {/* Section Title "الاتصال إلى" */}
+        <div className="text-right text-[#8e9aa8] text-[13px] font-medium pt-1 pb-0.5 px-1">
+          الاتصال إلى
+        </div>
+
+        {/* Accounts List matching screenshot */}
+        {accounts.map((acc) => {
           const isActive = activeAccount.id === acc.id;
-          const isTopPartial = acc.isPartial;
 
           return (
             <div
               key={acc.id}
               onClick={() => handleSelectAccount(acc)}
-              className={`relative bg-[#1f2125] rounded-2xl p-4 transition-all duration-200 cursor-pointer overflow-hidden border ${
+              className={`relative bg-[#1f2125] rounded-[20px] p-4 transition-all duration-200 cursor-pointer overflow-hidden border ${
                 isActive
                   ? 'border-[#3897f0]/80 shadow-[0_0_16px_rgba(56,151,240,0.22)] ring-1 ring-[#3897f0]/50'
                   : 'border-[#282b30] hover:border-[#383d44]'
-              } ${isTopPartial ? 'opacity-95' : ''}`}
+              }`}
             >
-              {/* Demo Diagonal Corner Ribbon matching screenshot */}
+              {/* Green "Demo" Ribbon in the TOP-RIGHT corner (matching screenshot) */}
               {acc.type === 'demo' && (
-                <div className="absolute top-0 left-0 w-24 h-24 overflow-hidden pointer-events-none z-10">
-                  <div className="absolute transform -rotate-45 bg-[#00c853] text-black font-extrabold text-[11px] py-1 right-[-35px] top-[14px] w-[120px] text-center shadow-md tracking-wider">
+                <div className="absolute top-0 right-0 w-24 h-24 overflow-hidden pointer-events-none z-10">
+                  <div className="absolute transform rotate-45 bg-[#00c853] text-black font-extrabold text-[11px] py-0.5 right-[-34px] top-[14px] w-[120px] text-center shadow-md tracking-wider">
                     Demo
                   </div>
                 </div>
               )}
 
-              {/* Card Header: Name + Logo */}
+              {/* Upper Main Row: Account details on the left, Broker Logo on the right */}
               <div className="flex items-start justify-between">
-                {/* Logo on the left (RTL right) */}
-                <div className="flex items-start gap-3">
+                {/* Left Side: Account Name, Broker, Server (aligned to the left as in screenshot) */}
+                <div className="flex flex-col items-start text-left z-0 pr-2">
+                  <h2 className="text-[17px] font-bold text-white tracking-tight leading-snug">
+                    {acc.name}
+                  </h2>
+                  <p className="text-[14px] font-medium text-[#3f96f3] mt-0.5">
+                    {acc.broker}
+                  </p>
+                  <p className="text-[13px] font-normal text-[#8e9aa8] mt-0.5 tabular-nums" dir="ltr">
+                    {acc.accountNumber} — {acc.server}
+                  </p>
+                </div>
+
+                {/* Right Side: Broker Logo (Exness yellow square or MetaQuotes 3D logo) */}
+                <div className="shrink-0 pl-1 pt-0.5 z-0">
                   {acc.logoType === 'exness' ? (
-                    <ExnessLogo className="w-11 h-11" />
+                    <ExnessLogo className="w-12 h-12" />
                   ) : (
-                    <MetaQuotesLogo className="w-11 h-11" />
+                    <MetaQuotesLogo className="w-12 h-12" />
                   )}
-
-                  <div>
-                    {/* User name: in screenshot, second card was "عرق جبين" and user asked for "اسلام" */}
-                    <div className="flex items-center gap-2">
-                      <h2 className="text-[17px] font-bold text-white tracking-tight">
-                        {acc.name}
-                      </h2>
-                      {isActive && (
-                        <span className="text-[10px] bg-[#3897f0]/20 text-[#64b5f6] border border-[#3897f0]/40 px-2 py-0.5 rounded-full font-semibold">
-                          الحساب النشط
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Broker Name in light blue matching screenshot */}
-                    <p className="text-[14px] font-medium text-[#4da6ff] mt-0.5">
-                      {acc.broker}
-                    </p>
-
-                    {/* Account number and server matching screenshot */}
-                    <p className="text-[13px] font-normal text-[#8e9aa8] mt-0.5 tracking-tight tabular-nums">
-                      {acc.accountNumber} — {acc.server}
-                    </p>
-                  </div>
                 </div>
               </div>
 
-              {/* Balance Section */}
-              <div className="mt-3.5 flex flex-col items-center justify-center">
-                <div className="text-[26px] font-bold text-white tracking-tight tabular-nums">
+              {/* Balance Row (aligned on the right side under the logo, as in screenshot) */}
+              <div className="mt-2 flex flex-col items-end text-right">
+                <div className="text-[25px] font-bold text-white tracking-tight tabular-nums leading-none">
                   {acc.balance.toLocaleString('en-US', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                   })}
                 </div>
-                <div className="text-[12px] text-[#8e9aa8] font-normal mt-0.5">
+                <div className="text-[12px] text-[#8e9aa8] font-normal mt-1">
                   {acc.lastKnownLabel || 'آخر ما عرف، USD'}
                 </div>
               </div>
 
-              {/* Bottom Card Footer: QR/Grid icon & Info (i) icon */}
-              <div className="mt-2 pt-2 border-t border-[#292c33] flex items-center justify-between">
-                {/* Info (i) icon button */}
+              {/* Card Footer: (i) on the left, QR icon on the right (matching screenshot) */}
+              <div className="mt-3 pt-2.5 border-t border-[#292c33] flex items-center justify-between">
+                {/* Info (i) icon button on the left */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -220,19 +229,19 @@ export const AccountsView: React.FC = () => {
                     setAccountInfoModalOpen(true);
                   }}
                   aria-label="معلومات الحساب"
-                  className="w-8 h-8 rounded-full border border-[#8e9aa8]/40 flex items-center justify-center text-[#8e9aa8] hover:text-white hover:border-white transition-colors"
+                  className="w-7 h-7 rounded-full border border-[#8e9aa8]/60 flex items-center justify-center text-[#8e9aa8] hover:text-white hover:border-white transition-colors cursor-pointer"
                 >
-                  <span className="text-sm font-serif font-bold italic">i</span>
+                  <span className="text-xs font-serif font-bold italic leading-none">i</span>
                 </button>
 
-                {/* QR / Tile Grid icon matching screenshot */}
+                {/* QR / Tile Grid icon on the right */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     alert(`رمز الاستجابة السريعة (QR) للحساب:\nرقم: ${acc.accountNumber}\nخادم: ${acc.server}\nوسيط: ${acc.broker}`);
                   }}
                   aria-label="QR Code"
-                  className="w-8 h-8 flex items-center justify-center text-[#8e9aa8] hover:text-white transition-colors"
+                  className="w-7 h-7 flex items-center justify-center text-[#8e9aa8] hover:text-white transition-colors cursor-pointer"
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
                     <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -268,14 +277,14 @@ export const AccountsView: React.FC = () => {
             <p className="text-sm text-[#8e9aa8] my-4 leading-relaxed">
               شهادة أمان الحساب مشفرة ومصادق عليها من قبل شركة Exness و MetaQuotes.
               <br />
-              الحساب النشط: <strong className="text-white">اسلام ({activeAccount.accountNumber})</strong>
+              الحساب النشط: <strong className="text-white">{activeAccount.name} ({activeAccount.accountNumber})</strong>
             </p>
-            <div className="bg-[#15171a] p-3 rounded-xl border border-[#282b30] text-xs font-mono text-green-400 break-all mb-4">
+            <div className="bg-[#15171a] p-3 rounded-xl border border-[#282b30] text-xs font-mono text-green-400 break-all mb-4" dir="ltr">
               SHA256: 7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
             </div>
             <button
               onClick={() => setCertModalOpen(false)}
-              className="w-full py-2.5 bg-[#3897f0] hover:bg-[#2884dc] text-white font-bold rounded-xl transition-colors"
+              className="w-full py-2.5 bg-[#3897f0] hover:bg-[#2884dc] text-white font-bold rounded-xl transition-colors cursor-pointer"
             >
               إغلاق
             </button>
