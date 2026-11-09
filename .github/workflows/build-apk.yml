@@ -25,11 +25,27 @@ jobs:
       - run: npm run build
       - run: npx cap sync android
       - run: chmod +x android/gradlew
-      - working-directory: android
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
-      - run: |
+      - name: Build Release APK
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon --stacktrace
+      - name: Sign Release APK
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          STORE_PASS: ${{ secrets.KEYSTORE_PASSWORD || 'mt5release123' }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'mt5' }}
+        run: |
+          set -e
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > release.keystore
+          else
+            keytool -genkeypair -keystore release.keystore -alias "$KEY_ALIAS" -keyalg RSA -keysize 2048 -validity 10000 -storepass "$STORE_PASS" -keypass "$STORE_PASS" -dname "CN=MetaTrader 5, O=MT5, C=US"
+          fi
+          BT="$ANDROID_HOME/build-tools/36.0.0"
+          UNSIGNED=$(find android/app/build/outputs/apk/release -name "*.apk" | head -n 1)
           mkdir -p release-apk
-          cp "$(find android/app/build/outputs/apk -name '*.apk' | head -n 1)" release-apk/MetaTrader-5.apk
+          "$BT/zipalign" -p -f 4 "$UNSIGNED" aligned.apk
+          "$BT/apksigner" sign --ks release.keystore --ks-pass "pass:$STORE_PASS" --key-pass "pass:$STORE_PASS" --ks-key-alias "$KEY_ALIAS" --out release-apk/MetaTrader-5.apk aligned.apk
+          "$BT/apksigner" verify release-apk/MetaTrader-5.apk
       - uses: actions/upload-artifact@v4
         with:
           name: MetaTrader-5-APK
